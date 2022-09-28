@@ -1,8 +1,8 @@
-## Simotel Laravel Connect Sample Application
+# Simotel Laravel Connect Sample Application
 
 This is a sample laravel application to demonstrate how you can connect to simotel in Laravel. 
 
-### Tutorial 
+## Preparing laravel and install simotel-laravel-connect package
 #### Step 1: Install laravel with compser
 First of all you must prepare a laravel application, if you have not, install laravel with composer:
 ```
@@ -90,6 +90,7 @@ Route::get("simotel/events",function(Request $request, $event){
 });
 ```
 #### Step 6: Listen to Simotel SmartApi
+
 ```php
 // routes/api.php
 
