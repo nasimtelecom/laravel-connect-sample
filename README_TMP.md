@@ -60,7 +60,7 @@ php artisan vendor:publish --provider="NasimTelecom\Simotel\Laravel\SimotelLarav
 #### Step 1: create api acount in simotel
 [image simotel web interface]
 
-![alt text](https://github.com/nasimtelecom/laravel-simotel-sample/blob/main/public/images/simotel.png?raw=true)
+![alt text](https://github.com/nasimtelecom/laravel-connect-sample/blob/main/public/images/simotel.png?raw=true)
 
 #### Step 2: edit simotel config file 
 ```php
