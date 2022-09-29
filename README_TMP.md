@@ -4,18 +4,18 @@ This is a laravel sample application to demonstrate how you can connect to simot
 We use **[simotel-laravel-connect](https://github.com/nasimtelecom/simotel-laravel-connect)** package to connect simotel and laravel together.
 
 ## Preparing laravel and install simotel-laravel-connect package
-#### Step 1: Install laravel with compser
+#### Step 1: install laravel with compser
 First of all you must prepare a laravel application, if you haven't install it yet, install laravel with composer:
 ```
 composer create-project --prefer-dist laravel/laravel simotel-connect
 ```
-#### Step 2: Install simotel-laravel-connect
+#### Step 2: install simotel-laravel-connect
 install simotel-laravel-connect package with composer:
 ``` 
 composer require nasimtelecom/simotel-laravel-connect
 ```
 
-#### Step 3: Config
+#### Step 3: config
 Use artisan command to publish simotel connect config file in laravel config folder:
 ```.
 php artisan vendor:publish --provider="NasimTelecom\Simotel\Laravel\SimotelLaravelServiceProvider"
@@ -57,9 +57,12 @@ php artisan vendor:publish --provider="NasimTelecom\Simotel\Laravel\SimotelLarav
 ## Simote Api (SA) 
 //about simotel api 
 
-#### Step 1: Create api acount in simotel
+#### Step 1: create api acount in simotel
 [image simotel web interface]
-#### Step 2: Edit simotel config file 
+
+![alt text](https://github.com/nasimtelecom/laravel-simotel-sample/blob/main/public/images/simotel.png?raw=true)
+
+#### Step 2: edit simotel config file 
 ```php
 // config/laravel-simotel.php
 
@@ -71,8 +74,8 @@ php artisan vendor:publish --provider="NasimTelecom\Simotel\Laravel\SimotelLarav
         'api_key' => 'apiToken',
     ],
 ```
-#### Step 3: Connect to simotel 
-You can use Simotel facade to connect to simotel:
+#### Step 3: connect to simotel
+In your controller use `Simotel` facade to connect to simotel:
 ```php
 // app\Http\Controller\SimotelConnectController.php
 $data = [
