@@ -1,10 +1,10 @@
 # Simotel Laravel Connect Sample Application
 
-This is a sample laravel application to demonstrate how you can connect to simotel in Laravel. 
+This is a laravel sample application to demonstrate how you can connect to simotel in Laravel. 
 
 ## Preparing laravel and install simotel-laravel-connect package
 #### Step 1: Install laravel with compser
-First of all you must prepare a laravel application, if you have not, install laravel with composer:
+First of all you must prepare a laravel application, if you haven't install it yet, install laravel with composer:
 ```
 composer create-project --prefer-dist laravel/laravel simotel-connect
 ```
@@ -53,12 +53,27 @@ php artisan vendor:publish --provider="NasimTelecom\Simotel\Laravel\SimotelLarav
     ],
 ];
 ```
-#### 
+## Simote Api (SA) 
+//about simotel api 
 
-#### Step 4: Connect to Simotel Server with SimotelApi (SA)
+#### Step 1: Create api acount in simotel
+[image simotel web interface]
+#### Step 2: Edit simotel config file 
+```php
+// config/laravel-simotel.php
+
+'simotelApi' => [
+        'server_address' => 'http://yourSimotelServer/api/v4',
+        'api_auth' => 'basic',  // simotel api authentication: basic,token,both
+        'api_user' => 'apiUser',
+        'api_pass' => 'apiPass',
+        'api_key' => 'apiToken',
+    ],
+```
+#### Step 3: Connect to simotel 
 You can use Simotel facade to connect to simotel:
 ```php
-// app\Http\Controller\SimotelConnectCOntroller.php
+// app\Http\Controller\SimotelConnectController.php
 $data = [
     
 ];
@@ -66,7 +81,7 @@ $res = Simotel::connect("pbx/users/search",$data);
 $users = $res->getData();
 
 ```
-#### Step 5: Listen for SimotelEventApi (SEA)
+## Simotel Event Api (SEA)
 Make a listener with artisan command:
 ```
 php artisan make:listener CdrEventListener
@@ -89,7 +104,7 @@ Route::get("simotel/events",function(Request $request, $event){
 
 });
 ```
-#### Step 6: Listen to Simotel SmartApi
+## Simotel SmartApi
 
 ```php
 // routes/api.php
