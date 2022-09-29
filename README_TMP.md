@@ -1,6 +1,8 @@
 # Simotel Laravel Connect Sample Application
 
 This is a laravel sample application to demonstrate how you can connect to simotel in Laravel. 
+<br>
+We use simotel-laravel-connect package to connect simotel and laravel together.
 
 ## Preparing laravel and install simotel-laravel-connect package
 #### Step 1: Install laravel with compser
