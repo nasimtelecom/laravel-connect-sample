@@ -10,12 +10,12 @@ First of all you must prepare a laravel application, if you haven't install it y
 composer create-project --prefer-dist laravel/laravel simotel-connect
 ```
 #### Step 2: install simotel-laravel-connect
-install simotel-laravel-connect package with composer:
+Install simotel-laravel-connect package with composer:
 ``` 
 composer require nasimtelecom/simotel-laravel-connect
 ```
 
-#### Step 3: config
+#### Step 3: publish config
 Use artisan command to publish simotel connect config file in laravel config folder:
 ```.
 php artisan vendor:publish --provider="NasimTelecom\Simotel\Laravel\SimotelLaravelServiceProvider"
@@ -54,17 +54,17 @@ php artisan vendor:publish --provider="NasimTelecom\Simotel\Laravel\SimotelLarav
     ],
 ];
 ```
-## Simote Api (SA) 
-//about simotel api 
+## Simote API (SA) 
+SA is a set of APIs that start by sending a request from the web service side to Simotel, this service is created in the RestAPI standard format.
 
-#### Step 1: create api acount in simotel
-[image simotel web interface]
+#### Step 1: create api acount in simotel web intreface
 
-![alt text](https://github.com/nasimtelecom/laravel-connect-sample/blob/main/public/images/simotel.png?raw=true)
+<img src="https://github.com/nasimtelecom/laravel-connect-sample/blob/main/public/images/simotel.png?raw=true" width="400">
 
 #### Step 2: edit simotel config file 
 ```php
 // config/laravel-simotel.php
+
 
 'simotelApi' => [
         'server_address' => 'http://yourSimotelServer/api/v4',
@@ -74,15 +74,64 @@ php artisan vendor:publish --provider="NasimTelecom\Simotel\Laravel\SimotelLarav
         'api_key' => 'apiToken',
     ],
 ```
+`api_auth`: Acording to [Simotel Docs](https://doc.mysup.ir/docs/api/v4/callcenter_api/SimoTelAPI/settings) you can connect to `SA` in 3 ways:
+* `basic` Basic Authentication
+* `token` Api Key (Token)
+* `both` Both Basic Authentication and Api Key (Token)
+
 #### Step 3: connect to simotel
 In your controller use `Simotel` facade to connect to simotel:
 ```php
 // app\Http\Controller\SimotelConnectController.php
-$data = [
+
+public function searchUsers(){
+
+    // The data will be sent to Simotel server as a request body
+    $data = [
+        "alike"=>false,
+        "conditions"=>["name"=>"200"],
+    ];
+
+    try{
+         // Sending request to simotel server
+        $res = Simotel::connect("pbx/users/search",$data);
+    }
+    catch(\Exception $e){
+        die($e->getMessage());
+    }
+   
+
+    // Determines whether the transaction was successful or not
+    // In other words, if the response status code is 
+    // between 200~299 then isOk() will return true 
+    if(!$res->isOk())
+        die("There is a problem");
+
+    // Or you can get response status code
+    $statusCode = $res->getStatusCode();
+
+    // Simotel will return a json response,
+    // to cast it to array use toArray() method
+    // it will be an array like this:
+    // [
+    //      "success" => true/false, 
+    //      "message" => "Simotel Message"
+    //      "data"    =>  [response data array]    
+    // ]
+    // success: determine wether transaction by simotel is ok or not
+    // message: if successs be false 
+    // Simotel send message that why transaction did not completed
+    $res->toArray();
+
+    // Simotel Success is true or false
+    $res->isSuccess();
+
+    // Get Simotel message if success be false
+    $res->getMessage();
     
-];
-$res = Simotel::connect("pbx/users/search",$data);
-$users = $res->getData();
+    // Get Simotel response data array
+    $users = $res->getData();
+}
 
 ```
 ## Simotel Event Api (SEA)
