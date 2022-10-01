@@ -140,7 +140,7 @@ public function searchUsers(){
 ## Simotel Event Api (SEA)
 Consider that you want to listen ti CdrEvent from simotel and store cdr data in database.
 #### Step 1: Simotel Event Api Setting
-#### Step 2: Make and register Listener
+#### Step 2: Make and register listener(s)
 
 Make a listener with artisan command:
 ```
@@ -155,25 +155,24 @@ Register listener in `EventServiceProvider` and connect it to `Nasim\Simotel\Lar
     ];
 ```
 
-there is the list of Simotel Event APIs that you can use:
+there is the list of Simotel Event classes that you can use:
 
-| Event Name  |  Simotel Event Class  |
-|---          |           ---         |
-| Cdr  |  Nasim\Simotel\Laravel\Events\SimotelEventCdr::class |
-| CdrQueue  |  Nasim\Simotel\Laravel\Events\SimotelEventCdrQueue::class |
-| ExtenAdded  |  Nasim\Simotel\Laravel\Events\SimotelEventExtenAdded::class |
-| ExtenRemoved  |  Nasim\Simotel\Laravel\Events\SimotelEventExtenRemoved::class |
-| IncomingCall |  Nasim\Simotel\Laravel\Events\SimotelEventIncomingCall::class |
-| IncomingFax |  Nasim\Simotel\Laravel\Events\SimotelEventIncomingFax::class |
-| NewState  |  Nasim\Simotel\Laravel\Events\SimotelEventNewState::class |
-| OutgoingCall  |  Nasim\Simotel\Laravel\Events\SimotelEventOutgoingCall::class |
-| Survey |  Nasim\Simotel\Laravel\Events\SimotelEventSurvey::class |
-| Transfer |  Nasim\Simotel\Laravel\Events\SimotelEventTransfer::class |
-| VoiceMail |  Nasim\Simotel\Laravel\Events\SimotelEventVoiceMail::class |
-| VoiceMailEmail  |  Nasim\Simotel\Laravel\Events\SimotelEventVoiceMailEmail::class |
+| Event Name    | Simotel Event Class                                           |
+|     ---       |        ---                                                    |
+| Cdr           | Nasim\Simotel\Laravel\Events\SimotelEventCdr::class           |
+| CdrQueue      | Nasim\Simotel\Laravel\Events\SimotelEventCdrQueue::class      |
+| ExtenAdded    | Nasim\Simotel\Laravel\Events\SimotelEventExtenAdded::class    |
+| ExtenRemoved  | Nasim\Simotel\Laravel\Events\SimotelEventExtenRemoved::class  |
+| IncomingCall  | Nasim\Simotel\Laravel\Events\SimotelEventIncomingCall::class  |
+| IncomingFax   | Nasim\Simotel\Laravel\Events\SimotelEventIncomingFax::class   |
+| NewState      | Nasim\Simotel\Laravel\Events\SimotelEventNewState::class      |
+| OutgoingCall  | Nasim\Simotel\Laravel\Events\SimotelEventOutgoingCall::class  |
+| Survey        | Nasim\Simotel\Laravel\Events\SimotelEventSurvey::class        |
+| Transfer      | Nasim\Simotel\Laravel\Events\SimotelEventTransfer::class      |
+| VoiceMail     | Nasim\Simotel\Laravel\Events\SimotelEventVoiceMail::class     |
+| VoiceMailEmail| Nasim\Simotel\Laravel\Events\SimotelEventVoiceMailEmail::class|
 
-
-you can collect SimotelEventApi data like cdr data in listener:
+you can collect SimotelEvent data (like cdr) data in listener:
 ```php
 // app/Listeners/StoreSimotelCdrInDatabase.php
 
@@ -182,8 +181,8 @@ you can collect SimotelEventApi data like cdr data in listener:
         $cdrData = $event->apiData();
     }
 ```
-### Step 3: dispatch SimotelEvent
-now define route in api.php and dispatch event by this commands:
+### Step 3: dispatch Simotel Event
+Now define route in api.php and dispatch event by this commands:
 ```php
 // routes/api.php
 
@@ -197,7 +196,7 @@ Route::get("simotel/events",function(Request $request, $event){
 
 });
 ```
-this route `simotel/events` get the Simotel EventApi request and dispatch coresponded Event automaticaly.
+This route `simotel/events` get the Simotel EventApi request and dispatch coresponded Event automaticaly.
 
 
 ## Simotel SmartApi
