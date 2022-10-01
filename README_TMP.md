@@ -139,8 +139,7 @@ public function searchUsers(){
 ```
 ## Simotel Event Api (SEA)
 Consider that you want to listen ti CdrEvent from simotel and store cdr data in database.
-#### Step 1: Simotel Event Api Setting
-#### Step 2: Make and register listener(s)
+#### Step 1: Make and register listener(s)
 
 Make a listener with artisan command:
 ```
@@ -181,7 +180,7 @@ you can collect SimotelEvent data (like cdr) data in listener:
         $cdrData = $event->apiData();
     }
 ```
-### Step 3: dispatch Simotel Event
+### Step 2: dispatch Simotel Event
 Now define route in api.php and dispatch event by this commands:
 ```php
 // routes/api.php
@@ -196,9 +195,11 @@ Route::get("simotel/events",function(Request $request, $event){
 
 });
 ```
-This route `simotel/events` get the Simotel EventApi request and dispatch coresponded Event automaticaly.
+After defining this route, the path `http://yourAppUrl/api/simotel/events` get the `SimotelEventApi` request and dispatch coresponded event automaticaly.
 
 
+#### Step 3: Simotel Event Api Setting
+Now you can put your application api url in Simotel config. for more information look at [Simotel Document](https://doc.mysup.ir/docs/simotel/callcenter-docs/maintenance/settings/api_settings).
 ## Simotel SmartApi
 
 ```php
