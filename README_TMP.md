@@ -172,7 +172,7 @@ there is the list of Simotel Event classes that you can use:
 | VoiceMail     | Nasim\Simotel\Laravel\Events\SimotelEventVoiceMail::class     |
 | VoiceMailEmail| Nasim\Simotel\Laravel\Events\SimotelEventVoiceMailEmail::class|
 
-you can collect SimotelEvent data (like cdr) data in listener:
+you can collect SimotelEvent data (like cdr data) in listener:
 ```php
 // app/Listeners/StoreSimotelCdrInDatabase.php
 
