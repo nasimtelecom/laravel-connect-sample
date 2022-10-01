@@ -61,6 +61,8 @@ SA is a set of APIs that start by sending a request from the web service side to
 
 <img src="https://github.com/nasimtelecom/laravel-connect-sample/blob/main/public/images/simotel.png?raw=true" width="400">
 
+Visit [Simotel Docs](https://doc.mysup.ir/docs/simotel/callcenter-docs/maintenance/api_accounts) for more details.
+
 #### Step 2: edit simotel config file 
 ```php
 // config/laravel-simotel.php
@@ -68,13 +70,13 @@ SA is a set of APIs that start by sending a request from the web service side to
 
 'simotelApi' => [
         'server_address' => 'http://yourSimotelServer/api/v4',
-        'api_auth' => 'basic',  // simotel api authentication: basic,token,both
+        'api_auth' => 'basic',  // basic,token,both (simotel api authentication)
         'api_user' => 'apiUser',
         'api_pass' => 'apiPass',
         'api_key' => 'apiToken',
     ],
 ```
-`api_auth`: Acording to [Simotel Docs](https://doc.mysup.ir/docs/api/v4/callcenter_api/SimoTelAPI/settings) you can connect to `SA` in 3 ways:
+`api_auth`: Acording to [Simotel Docs](https://doc.mysup.ir/docs/api/v4/callcenter_api/SimoTelAPI/settings) Simotel athenticate and authorize you in 3 ways:
 * `basic` Basic Authentication
 * `token` Api Key (Token)
 * `both` Both Basic Authentication and Api Key (Token)
@@ -115,34 +117,53 @@ public function searchUsers(){
     // it will be an array like this:
     // [
     //      "success" => true/false, 
-    //      "message" => "Simotel Message"
+    //      "message" => "Simotel Error Message"
     //      "data"    =>  [response data array]    
     // ]
     // success: determine wether transaction by simotel is ok or not
-    // message: if successs be false 
-    // Simotel send message that why transaction did not completed
+    // message: this is simotel response message
+    // that tell us why transactoion did not completed
     $res->toArray();
 
     // Simotel Success is true or false
-    $res->isSuccess();
+    if(!$res->isSuccess())
+        // Get Simotel message if isSuccess()==false
+        die($res->getMessage());
 
-    // Get Simotel message if success be false
-    $res->getMessage();
-    
     // Get Simotel response data array
     $users = $res->getData();
+
+    
 }
 
 ```
 ## Simotel Event Api (SEA)
+Consider that you want to listen ti CdrEvent from simotel and store cdr data in database.
+#### Step 1: Simotel Event Api Setting
+#### Step 2: Make and register Listener
+
 Make a listener with artisan command:
 ```
-php artisan make:listener CdrEventListener
+php artisan make:listener StoreSimotelCdrInDatabase
 ```
-000000 Listener with SimotelEvent in EventServiceProvider
+Register listener in `EventServiceProvider` and connect it to `Nasim\Simotel\Laravel\Events\SimotelEventCdr`
 ```php
-[]
+ protected $listen = [
+        Nasim\Simotel\Laravel\Events\SimotelEventCdr::class => [
+            StoreSimotelCdrInDatabase::class,
+        ],
+    ];
 ```
+you can collect SimotelEventApi data like cdr data in listener:
+```php
+// app/Listeners/StoreSimotelCdrInDatabase.php
+
+    public function handle($event)
+    {
+        $cdrData = $event->apiData();
+    }
+```
+### Step 3: dispatch SimotelEvent
 now define route in api.php and dispatch event by this commands:
 ```php
 // routes/api.php
@@ -157,6 +178,25 @@ Route::get("simotel/events",function(Request $request, $event){
 
 });
 ```
+this route get the Simotel EventApi request and dispatch coresponded Event automaticaly.
+there is the list of Simotel Event APIs that you can use:
+
+| Event Name  |  Simotel Event Class  |
+|---          |           ---         |
+| Cdr  |  Nasim\Simotel\Laravel\Events\SimotelEventCdr::class |
+| CdrQueue  |  Nasim\Simotel\Laravel\Events\SimotelEventCdrQueue::class |
+| ExtenAdded  |  Nasim\Simotel\Laravel\Events\SimotelEventExtenAdded::class |
+| ExtenRemoved  |  Nasim\Simotel\Laravel\Events\SimotelEventExtenRemoved::class |
+| IncomingCall |  Nasim\Simotel\Laravel\Events\SimotelEventIncomingCall::class |
+| IncomingFax |  Nasim\Simotel\Laravel\Events\SimotelEventIncomingFax::class |
+| NewState  |  Nasim\Simotel\Laravel\Events\SimotelEventNewState::class |
+| OutgoingCall  |  Nasim\Simotel\Laravel\Events\SimotelEventOutgoingCall::class |
+| Survey |  Nasim\Simotel\Laravel\Events\SimotelEventSurvey::class |
+| Transfer |  Nasim\Simotel\Laravel\Events\SimotelEventTransfer::class |
+| VoiceMail |  Nasim\Simotel\Laravel\Events\SimotelEventVoiceMail::class |
+| VoiceMailEmail  |  Nasim\Simotel\Laravel\Events\SimotelEventVoiceMailEmail::class |
+
+
 ## Simotel SmartApi
 
 ```php
